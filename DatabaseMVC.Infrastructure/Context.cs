@@ -11,6 +11,8 @@ namespace DatabaseMVC.Infrastructure
 {
     public class Context : IdentityDbContext
     {
+        // Poprawić wartości stringów na krótsze 
+        public DbSet<City> Citys { get; set; }
         public DbSet<ContactPerson> ContactPersons { get; set; }
         public DbSet<Contractor> Contractors { get; set; }
         public DbSet<Department> Departments { get; set; }
@@ -36,6 +38,8 @@ namespace DatabaseMVC.Infrastructure
 
             modelBuilder.Entity<Order>(o =>
             {
+                o.Property(d => d.CaseNumber).HasColumnType("nvarchar(20)");
+                o.Property(d => d.CodeName).HasColumnType("nvarchar(30)");
                 o.Property(d => d.ReceivedApplicationDate).HasColumnType("date");
                 o.Property(d => d.RecognizeDate).HasColumnType("date");
                 o.Property(d => d.InstallationDate).HasColumnType("date");
@@ -67,10 +71,25 @@ namespace DatabaseMVC.Infrastructure
                 .HasForeignKey(head => head.HeadquaterId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+                cont.HasOne<City>(cit => cit.City)
+                .WithMany(cont => cont.Contractors)
+                .HasForeignKey(cit => cit.CityId)
+                .OnDelete(DeleteBehavior.NoAction);
+
                 cont.HasMany<Order>(order => order.Orders)
                 .WithOne(cont => cont.Contractor)
                 .HasForeignKey(order => order.ContractorId)
                 .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<City>(c =>
+            {
+                c.Property(d => d.CityName).HasColumnType("nvarchar(50)");
+
+                //c.HasMany<Contractor>(con => con.Contractors)
+                //.WithOne(c => c.City)
+                //.HasForeignKey(con => con.CityId)
+                //.OnDelete(DeleteBehavior.NoAction);
             });
 
             //modelBuilder.Entity<Device>(d =>
@@ -90,6 +109,8 @@ namespace DatabaseMVC.Infrastructure
 
             modelBuilder.Entity<Storage>(s =>
             {
+                s.Property(num => num.InternalDepartmentNumber).HasColumnType("nvarchar(30)");
+
                 s.HasOne<TypeOfStorage>(tos => tos.TypeOfStorage)
                 .WithMany(s => s.Storages)
                 .HasForeignKey(tos => tos.TypeOfStorageId)
@@ -101,8 +122,23 @@ namespace DatabaseMVC.Infrastructure
                 .OnDelete(DeleteBehavior.NoAction);
             });
 
+            modelBuilder.Entity<SIMCard>(s =>
+            {
+                s.Property(nos => nos.NumberOnSIMCard).HasColumnType("nvarchar(20)");
+                s.Property(msi => msi.MSISDN).HasColumnType("varchar(11)");
+                s.Property(ip => ip.IP).HasColumnType("varchar(14)");
+                s.Property(pin => pin.PIN).HasColumnType("varchar(4)");
+                s.Property(puk => puk.PUK).HasColumnType("varchar(8)");
+            });
+
             modelBuilder.Entity<Device>(d =>
             {
+                d.Property(sn => sn.SerialNumber).HasColumnType("nvarchar(50)");
+                d.Property(des => des.Description).HasColumnType("nvarchar(250)");
+                d.Property(dn => dn.DepartmentNumber).HasColumnType("nvarchar(50)");
+                d.Property(log => log.Login).HasColumnType("nvarchar(20)");
+                d.Property(pas => pas.Password).HasColumnType("nvarchar(30)");
+
                 d.HasOne<Manufacture>(m => m.Manufacture)
                 .WithMany(d => d.Devices)
                 .HasForeignKey(m => m.ManufacturerId)
@@ -111,6 +147,9 @@ namespace DatabaseMVC.Infrastructure
 
             modelBuilder.Entity<CameraDevice>(cd =>
             {
+                cd.Property(sn => sn.TechSpecification)
+                .HasColumnType("nvarchar(250)");
+
                 cd.HasOne<Storage>(s => s.Storage)
                 .WithMany(cd => cd.CameraDevices)
                 .HasForeignKey(s => s.StorageCamId)

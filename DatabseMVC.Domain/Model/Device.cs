@@ -10,8 +10,8 @@
         public bool IsBroken { get; set; } 
         public bool IsTakenOutOfState { get; set; }
         public bool IsInUse { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
+        public string? Login { get; set; }
+        public string? Password { get; set; }
 
         public virtual Manufacture? Manufacture { get; set; }
         //public virtual SIMCard? SIMCard { get; set; }

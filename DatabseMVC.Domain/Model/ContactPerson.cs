@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -15,11 +16,13 @@ namespace DatabaseMVC.Domain.Model
         /// <summary>
         /// First name of person to contact
         /// </summary>
+        [MaxLength(50)]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Last name of person to contact
         /// </summary>
+        [MaxLength(100)]
         public string LastName { get; set; }
 
         /// <summary>

@@ -4,10 +4,10 @@
     {
         public int Id { get; set; }
         public string? NumberOnSIMCard { get; set; }
-        public int MSISDN { get; set; }
+        public string MSISDN { get; set; }
         public string? IP { get; set; }
-        public short PIN { get; set; }
-        public int PUK { get; set; }
+        public string PIN { get; set; }
+        public string PUK { get; set; }
         public bool IsLimitOnInternet { get; set; }
         public short? LimitGB { get; set; }
 

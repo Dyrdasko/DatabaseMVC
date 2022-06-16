@@ -22,6 +22,23 @@ namespace DatabaseMVC.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("DatabaseMVC.Domain.Model.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CityName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Citys");
+                });
+
             modelBuilder.Entity("DatabaseMVC.Domain.Model.ContactPerson", b =>
                 {
                     b.Property<int>("Id")
@@ -32,11 +49,13 @@ namespace DatabaseMVC.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -55,6 +74,9 @@ namespace DatabaseMVC.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
@@ -71,6 +93,8 @@ namespace DatabaseMVC.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("DepartmentId");
 
@@ -93,7 +117,8 @@ namespace DatabaseMVC.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("Id");
 
@@ -109,10 +134,10 @@ namespace DatabaseMVC.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("DepartmentNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -128,18 +153,16 @@ namespace DatabaseMVC.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Login")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("ManufacturerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("SerialNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -160,7 +183,8 @@ namespace DatabaseMVC.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -206,7 +230,8 @@ namespace DatabaseMVC.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -222,10 +247,10 @@ namespace DatabaseMVC.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CaseNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("CodeName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("ContractorId")
                         .HasColumnType("int");
@@ -270,7 +295,7 @@ namespace DatabaseMVC.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("IP")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(14)");
 
                     b.Property<bool>("IsLimitOnInternet")
                         .HasColumnType("bit");
@@ -278,17 +303,20 @@ namespace DatabaseMVC.Infrastructure.Migrations
                     b.Property<short?>("LimitGB")
                         .HasColumnType("smallint");
 
-                    b.Property<int>("MSISDN")
-                        .HasColumnType("int");
+                    b.Property<string>("MSISDN")
+                        .IsRequired()
+                        .HasColumnType("varchar(11)");
 
                     b.Property<string>("NumberOnSIMCard")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)");
 
-                    b.Property<short>("PIN")
-                        .HasColumnType("smallint");
+                    b.Property<string>("PIN")
+                        .IsRequired()
+                        .HasColumnType("varchar(4)");
 
-                    b.Property<int>("PUK")
-                        .HasColumnType("int");
+                    b.Property<string>("PUK")
+                        .IsRequired()
+                        .HasColumnType("varchar(8)");
 
                     b.HasKey("Id");
 
@@ -308,7 +336,7 @@ namespace DatabaseMVC.Infrastructure.Migrations
 
                     b.Property<string>("InternalDepartmentNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("ManufactureId")
                         .HasColumnType("int");
@@ -335,7 +363,8 @@ namespace DatabaseMVC.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
@@ -552,7 +581,7 @@ namespace DatabaseMVC.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TechSpecification")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasIndex("StorageCamId");
 
@@ -585,6 +614,12 @@ namespace DatabaseMVC.Infrastructure.Migrations
 
             modelBuilder.Entity("DatabaseMVC.Domain.Model.Contractor", b =>
                 {
+                    b.HasOne("DatabaseMVC.Domain.Model.City", "City")
+                        .WithMany("Contractors")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("DatabaseMVC.Domain.Model.Department", "Department")
                         .WithMany("Contractors")
                         .HasForeignKey("DepartmentId")
@@ -606,6 +641,8 @@ namespace DatabaseMVC.Infrastructure.Migrations
                     b.HasOne("DatabaseMVC.Domain.Model.ContactPerson", "SecondaryContactPerson")
                         .WithMany("SecondContractor")
                         .HasForeignKey("SecondaryContactPersonId");
+
+                    b.Navigation("City");
 
                     b.Navigation("Department");
 
@@ -752,6 +789,11 @@ namespace DatabaseMVC.Infrastructure.Migrations
                         .HasForeignKey("SIMCardId");
 
                     b.Navigation("SIMCard");
+                });
+
+            modelBuilder.Entity("DatabaseMVC.Domain.Model.City", b =>
+                {
+                    b.Navigation("Contractors");
                 });
 
             modelBuilder.Entity("DatabaseMVC.Domain.Model.ContactPerson", b =>

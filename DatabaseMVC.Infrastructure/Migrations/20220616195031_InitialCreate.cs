@@ -49,13 +49,26 @@ namespace DatabaseMVC.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Citys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CityName = table.Column<string>(type: "nvarchar(50)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Citys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ContactPersons",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -69,7 +82,7 @@ namespace DatabaseMVC.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,7 +95,7 @@ namespace DatabaseMVC.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,7 +108,7 @@ namespace DatabaseMVC.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -108,11 +121,11 @@ namespace DatabaseMVC.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NumberOnSIMCard = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MSISDN = table.Column<int>(type: "int", nullable: false),
-                    IP = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PIN = table.Column<short>(type: "smallint", nullable: false),
-                    PUK = table.Column<int>(type: "int", nullable: false),
+                    NumberOnSIMCard = table.Column<string>(type: "nvarchar(20)", nullable: true),
+                    MSISDN = table.Column<string>(type: "varchar(11)", nullable: false),
+                    IP = table.Column<string>(type: "varchar(14)", nullable: true),
+                    PIN = table.Column<string>(type: "varchar(4)", nullable: false),
+                    PUK = table.Column<string>(type: "varchar(8)", nullable: false),
                     IsLimitOnInternet = table.Column<bool>(type: "bit", nullable: false),
                     LimitGB = table.Column<short>(type: "smallint", nullable: true)
                 },
@@ -127,7 +140,7 @@ namespace DatabaseMVC.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -248,12 +261,19 @@ namespace DatabaseMVC.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     HeadquaterId = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    CityId = table.Column<int>(type: "int", nullable: false),
+                    HasActiveCase = table.Column<bool>(type: "bit", nullable: false),
                     FirstContactPersonId = table.Column<int>(type: "int", nullable: false),
                     SecondaryContactPersonId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Contractors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Contractors_Citys_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Citys",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Contractors_ContactPersons_FirstContactPersonId",
                         column: x => x.FirstContactPersonId,
@@ -282,7 +302,7 @@ namespace DatabaseMVC.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InternalDepartmentNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InternalDepartmentNumber = table.Column<string>(type: "nvarchar(30)", nullable: false),
                     ManufactureId = table.Column<int>(type: "int", nullable: false),
                     Capacity = table.Column<int>(type: "int", nullable: false),
                     TypeOfStorageId = table.Column<int>(type: "int", nullable: false)
@@ -309,8 +329,8 @@ namespace DatabaseMVC.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ContractorId = table.Column<int>(type: "int", nullable: false),
-                    CaseNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CodeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CaseNumber = table.Column<string>(type: "nvarchar(20)", nullable: true),
+                    CodeName = table.Column<string>(type: "nvarchar(30)", nullable: true),
                     ReceivedApplicationDate = table.Column<DateTime>(type: "date", nullable: false),
                     RecognizeDate = table.Column<DateTime>(type: "date", nullable: true),
                     IsPosibility = table.Column<bool>(type: "bit", nullable: false),
@@ -336,17 +356,17 @@ namespace DatabaseMVC.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DepartmentNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SerialNumber = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    DepartmentNumber = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     ManufacturerId = table.Column<int>(type: "int", nullable: false),
                     IsBroken = table.Column<bool>(type: "bit", nullable: false),
                     IsTakenOutOfState = table.Column<bool>(type: "bit", nullable: false),
                     IsInUse = table.Column<bool>(type: "bit", nullable: false),
-                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Login = table.Column<string>(type: "nvarchar(20)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(30)", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TechSpecification = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TechSpecification = table.Column<string>(type: "nvarchar(250)", nullable: true),
                     StorageCamId = table.Column<int>(type: "int", nullable: true),
                     StorageRecId = table.Column<int>(type: "int", nullable: true),
                     SIMCardId = table.Column<int>(type: "int", nullable: true)
@@ -441,6 +461,11 @@ namespace DatabaseMVC.Infrastructure.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contractors_CityId",
+                table: "Contractors",
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contractors_DepartmentId",
@@ -554,6 +579,9 @@ namespace DatabaseMVC.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "TypeOfStorages");
+
+            migrationBuilder.DropTable(
+                name: "Citys");
 
             migrationBuilder.DropTable(
                 name: "ContactPersons");
