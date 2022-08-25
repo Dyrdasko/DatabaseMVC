@@ -26,12 +26,13 @@ namespace DatabaseMVC.Domain.Model
         public string LastName { get; set; }
 
         /// <summary>
-        /// Phone number of to contact
+        /// Phone number of person to contact
         /// </summary>
+        [MaxLength(13)]
         public string PhoneNumber { get; set; }
 
         [InverseProperty("FirstContactPerson")]
-        public virtual ICollection<Contractor>? FirstContractor { get; set; }
+        public virtual ICollection<Contractor> FirstContractor { get; set; }
 
         [InverseProperty("SecondaryContactPerson")]
         public virtual ICollection<Contractor>? SecondContractor { get; set; }

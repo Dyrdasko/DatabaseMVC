@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using DatabaseMVC.Application.Interfaces;
 using DatabaseMVC.Application.ViewModels.Contractor;
 using DatabaseMVC.Domain.Interfaces;
+using DatabaseMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,34 @@ namespace DatabaseMVC.Application.Service
             _mapper = mapper;
         }
 
+        public int AddContactPerson(NewContactPersonVm contactPerson)
+        {
+            var contPer = _mapper.Map<ContactPerson>(contactPerson);
+            var id = _contractorRepo.AddContactPerson(contPer);
+            return id;
+        }
+
         public int AddContractor(NewContractorVm contractor)
         {
-            throw new NotImplementedException();
+            var contr = _mapper.Map<Contractor>(contractor);
+            var id = _contractorRepo.AddContractor(contr);
+            //var contractorVm = new NewContractorVm
+            //{
+            //    Id = contractor.Id,
+            //    HeadquaterId = contractor.HeadquaterId,
+            //    HeadquaterName = contractor.HeadquaterName,
+            //    DepartmentId = contractor.DepartmentId,
+            //    DepartmentName = contractor.DepartmentName,
+            //    CityId = contractor.CityId,
+            //    CityName = contractor.CityName,
+            //    FirstContactPersonId = contractor.FirstContactPersonId,
+            //    FirstContactPersonFirstName = contractor.FirstContactPersonFirstName,
+            //    FirstContactPersonLastName = contractor.FirstContactPersonLastName,
+            //    SecondContactPersonId = contractor.SecondContactPersonId,
+            //    SecondContactPersonFirstName = contractor.SecondContactPersonFirstName,
+            //    SecondContactPersonLastName = contractor.SecondContactPersonLastName,
+            //};
+            return id;
         }
 
         public ContactPersonDetailVm GetContactPersonDetail(int contactPersonId)
@@ -68,14 +94,16 @@ namespace DatabaseMVC.Application.Service
             return contractorVm;
         }
 
-        public ListContractorForListVm GetAllContractorsForList()
+        public ListContractorForListVm GetAllContractorsForList(int pageSize, int pageNo)
         {
             var contractors = _contractorRepo.GetAllActiveContractors()
                 .ProjectTo<ContractorForListVm>(_mapper.ConfigurationProvider).ToList();
-
+            var contractorsToShow = contractors.Skip(pageSize * (pageNo-1)).Take(pageSize).ToList();
             var contractorList = new ListContractorForListVm()
             {
-                Contractors = contractors,
+                PageSize = pageSize,
+                CurrentPage = pageNo,
+                Contractors = contractorsToShow,
                 Count = contractors.Count
             };
 

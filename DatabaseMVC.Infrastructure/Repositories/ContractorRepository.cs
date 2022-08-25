@@ -17,6 +17,20 @@ namespace DatabaseMVC.Infrastructure.Repositories
             _context = context;
         }
 
+        public int AddContactPerson(ContactPerson contactPerson)
+        {
+            _context.ContactPersons.Add(contactPerson);
+            _context.SaveChanges();
+            return contactPerson.Id;
+        }
+
+        public int AddContractor(Contractor contractor)
+        {
+            _context.Contractors.Add(contractor);
+            _context.SaveChanges();
+            return contractor.Id;
+        }
+
         public IQueryable<Contractor> GetAllActiveContractors()
         {
             return _context.Contractors.Where(p => p.HasActiveCase);
@@ -30,7 +44,6 @@ namespace DatabaseMVC.Infrastructure.Repositories
         public Contractor GetContractor(int contractorId)
         {
             return _context.Contractors.FirstOrDefault(p => p.Id == contractorId);
-            //throw new NotImplementedException();
         }
     }
 }

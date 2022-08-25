@@ -12,5 +12,7 @@ namespace DatabaseMVC.Domain.Interfaces
         IQueryable<Contractor> GetAllActiveContractors();
         ContactPerson GetContactPerson(int contactPersonId);
         Contractor GetContractor(int contractorId);
+        int AddContactPerson(ContactPerson contactPerson);
+        int AddContractor(Contractor contractor);
     }
 }

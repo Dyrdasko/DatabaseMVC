@@ -13,42 +13,56 @@ namespace DatabaseMVC.Web.Controllers
             _contrService = contractorService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            var model = _contrService.GetAllContractorsForList();
+            var model = _contrService.GetAllContractorsForList(2, 1);
             return View(model);
         }
 
-        //[HttpGet]
-        //public IActionResult AddContractor()
-        //{
-        //    return View();
-        //}
+        [HttpPost]
+        public IActionResult Index(int pageSize, int? pageNo)
+        {
+            if (!pageNo.HasValue)
+            {
+                pageNo = 1;
+            }
 
-        //[HttpPost]
-        //public IActionResult AddContractor(ContractorModel model)
-        //{
-        //    var id = _contrService.AddContractor(model);
-        //    return View();
-        //}
+            var model = _contrService.GetAllContractorsForList(pageSize, (int)pageNo);
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult AddContactPerson()
+        {
+            //var model = new NewContactPersonVm();
+            return View(new NewContactPersonVm());
+        }
+
+        [HttpPost]
+        public IActionResult AddContactPerson(NewContactPersonVm model)
+        {
+            var id = _contrService.AddContactPerson(model);
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult AddContractor()
+        {
+            return View(new NewContractorVm());
+        }
+
+        [HttpPost]
+        public IActionResult AddContractor(NewContractorVm model)
+        {
+            var id = _contrService.AddContractor(model);
+            return View();
+        }
 
         public IActionResult ViewContractor(int contractorId)
         {
             var contractorModel = _contrService.GetContractorDetail(contractorId);
             return View(contractorModel);
         }
-
-        //[HttpGet]
-        //public IActionResult AddContactPerson(int contactPersonId)
-        //{
-        //    return View(new NewContractorVm);
-        //}
-
-        //[HttpPost]
-        //public IActionResult AddContactPerson(NewContractorVm model)
-        //{
-        //    var id = _contrService.AddContactPerson(model);
-        //    return View();
-        //}
     }
 }
